@@ -1,0 +1,3 @@
+[submodule "tool_http_server"]
+    path = lib/httpserver
+    url = https://github.com/indraminsk/tool_http_server.git
