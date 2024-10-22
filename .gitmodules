@@ -1,3 +1,6 @@
-[submodule "tool_http_server"]
-    path = lib/httpserver
-    url = https://github.com/indraminsk/tool_http_server.git
+[submodule "lib/httpserver"]
+	path = lib/httpserver
+	url = git@github.com:indraminsk/tool_http_server.git
+[submodule "lib/logger"]
+	path = lib/logger
+	url = git@github.com:indraminsk/tool_logger_slogger.git
