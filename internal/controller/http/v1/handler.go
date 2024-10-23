@@ -2,14 +2,14 @@ package v1
 
 import (
 	"net/http"
-	"patterns/tee/server/internal/app"
+	"patterns/tee/server/internal/entity"
 )
 
 type Handler struct {
 	ServMux *http.ServeMux
 }
 
-func NewHandler(logger app.ILogger) Handler {
+func NewHandler(logger entity.ILogger) Handler {
 	handler := Handler{
 		ServMux: http.NewServeMux(),
 	}

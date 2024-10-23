@@ -2,14 +2,14 @@ package v1
 
 import (
 	"net/http"
-	"patterns/tee/server/internal/app"
+	"patterns/tee/server/internal/entity"
 )
 
 type PingHandler struct {
-	logger app.ILogger
+	logger entity.ILogger
 }
 
-func newPingHandler(logger app.ILogger) *PingHandler {
+func newPingHandler(logger entity.ILogger) *PingHandler {
 	return &PingHandler{
 		logger: logger,
 	}

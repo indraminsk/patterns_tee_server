@@ -1,32 +1,22 @@
 package app
 
 import (
-	"log/slog"
 	"os"
 	"os/signal"
+	"patterns/tee/server/config"
 	v1 "patterns/tee/server/internal/controller/http/v1"
-	slogger "patterns/tee/server/lib/logger"
 	"syscall"
-	"time"
 	httpserver "tool/http/server"
+	slogger "tool/logger/slog"
 )
 
-type ILogger interface {
-	Debug(message interface{}, args ...interface{})
-	Info(message string, args ...interface{})
-	Warn(message string, args ...interface{})
-	Error(message interface{}, args ...interface{})
-	Fatal(message interface{}, args ...interface{})
-	Timing(message string, starting time.Time)
-}
-
-func Run() {
-	logger := slogger.NewLogger(-4, 0)
+func Run(cfg *config.Config) {
+	logger := slogger.NewLogger(cfg.App.Logger.Level, cfg.App.Logger.Type)
 
 	handler := v1.NewHandler(logger)
 
-	srv := httpserver.New(handler.ServMux, httpserver.Addr("", "9001"))
-	logger.Info("[INFO] run service", "host", "", "port", "9001")
+	srv := httpserver.New(handler.ServMux, httpserver.Addr(cfg.App.HTTP.Host, cfg.App.HTTP.Port))
+	logger.Info("run service", "host", cfg.App.HTTP.Host, "port", cfg.App.HTTP.Port)
 
 	// wait signal
 	interrupt := make(chan os.Signal, 1)
@@ -34,15 +24,15 @@ func Run() {
 
 	select {
 	case s := <-interrupt:
-		slog.Info("main - signal:", s.String())
+		logger.Info("signal.Notify:", "message", s.String())
 	case err := <-srv.Notify():
-		slog.Error("main - httpServer.Notify:", "error", err)
+		logger.Error("httpServer.Notify:", "error", err)
 	}
 
 	// shutdown
 	err := srv.Shutdown()
 	if err != nil {
-		slog.Error("main - httpServer.Shutdown", err)
+		logger.Error("httpServer.Shutdown", "error", err)
 	}
 
 }
