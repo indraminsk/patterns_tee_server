@@ -1,0 +1,3 @@
+tests:
+	clear && echo "RUN ALL TESTS" && go clean -testcache && go test ./...
+.PHONY: tests
